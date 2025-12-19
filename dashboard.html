@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Teacher's Content Planner</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">EduPlan Pro</div>
+        <ul class="nav-links" role="navigation" aria-label="Main navigation">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="dashboard.html" aria-current="page">Dashboard</a></li>
+            <li><a href="planner.html">Planner</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+
+    <main class="container" role="main">
+        <h1>Dashboard</h1>
+        <section aria-labelledby="overview-heading">
+            <h2 id="overview-heading">Academic Overview</h2>
+            <div class="grid" style="margin-top: 20px;">
+                <div class="stat-card" role="group" aria-label="Total subjects">
+                    <h3>Subjects</h3>
+                    <p id="stat-total-subjects">0</p>
+                </div>
+                <div class="stat-card" role="group" aria-label="Total classes">
+                    <h3>Classes</h3>
+                    <p id="stat-total-classes">0</p>
+                </div>
+                <div class="stat-card" role="group" aria-label="Planned lessons">
+                    <h3>Planned</h3>
+                    <p id="stat-planned">0</p>
+                </div>
+                <div class="stat-card" role="group" aria-label="Completed lessons">
+                    <h3>Completed</h3>
+                    <p id="stat-completed">0</p>
+                </div>
+                <div class="stat-card" role="group" aria-label="Upcoming exams">
+                    <h3>Upcoming Exams</h3>
+                    <p id="stat-exams">0</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

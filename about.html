@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>About | Academic System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header>
+        <nav class="navbar" role="navigation" aria-label="Main navigation">
+            <div class="logo">EduPlan Pro</div>
+            <button class="nav-toggle" aria-controls="primary-nav" aria-expanded="false">Menu</button>
+            <ul id="primary-nav" class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="planner.html">Planner</a></li>
+                <li><a href="about.html" aria-current="page">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="main" class="container" role="main">
+        <h1>About This System</h1>
+        <p>The <strong>Teacher's Content Planner</strong> bridges the gap between lesson preparation and student awareness. It lets educators digitize syllabus breakdowns and gives students a clear view of upcoming tests and assignments.</p>
+
+        <ul class="features">
+            <li><strong>Efficiency:</strong> Reduce paper-based planning.</li>
+            <li><strong>Transparency:</strong> Students can view schedules 24/7.</li>
+            <li><strong>Persistence:</strong> Data remains saved even after closing the browser.</li>
+        </ul>
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+        <p>&copy; <span id="year"></span> EduPlan Pro</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // small inline enhancements
+        document.getElementById('year').textContent = new Date().getFullYear();
+        const toggle = document.querySelector('.nav-toggle');
+        const nav = document.getElementById('primary-nav');
+        if (toggle && nav) {
+            toggle.addEventListener('click', () => {
+                const expanded = toggle.getAttribute('aria-expanded') === 'true';
+                toggle.setAttribute('aria-expanded', String(!expanded));
+                nav.classList.toggle('open');
+            });
+        }
+    </script>
+</body>
+</html>

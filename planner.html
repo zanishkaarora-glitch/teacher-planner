@@ -1,0 +1,118 @@
+// script.js
+(() => {
+    const STORAGE_KEY = 'eduplan_plans';
+    const form = document.getElementById('planner-form');
+    const tbody = document.getElementById('planner-table-body');
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    const fields = {
+        teacherName: document.getElementById('teacher-name'),
+        subject: document.getElementById('subject'),
+        classSection: document.getElementById('class-section'),
+        topic: document.getElementById('topic'),
+        lessonType: document.getElementById('lesson-type'),
+        date: document.getElementById('date'),
+        status: document.getElementById('status')
+    };
+
+    let plans = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    let editingId = null;
+
+    function save() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(plans));
+        render(plans);
+    }
+
+    function render(list) {
+        tbody.innerHTML = '';
+        if (!list.length) return;
+        list.forEach(p => {
+            const tr = document.createElement('tr');
+            tr.dataset.id = p.id;
+            tr.innerHTML = `
+                <td>${p.date || ''}</td>
+                <td>${escapeHtml(p.subject)} / ${escapeHtml(p.classSection)}</td>
+                <td>${escapeHtml(p.topic)}</td>
+                <td>${escapeHtml(p.lessonType)}</td>
+                <td><button class="status-btn">${escapeHtml(p.status)}</button></td>
+                <td>
+                    <button class="edit-btn">Edit</button>
+                    <button class="delete-btn">Delete</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function escapeHtml(s) {
+        return String(s || '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    }
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        const data = {
+            teacherName: fields.teacherName.value.trim(),
+            subject: fields.subject.value.trim(),
+            classSection: fields.classSection.value.trim(),
+            topic: fields.topic.value.trim(),
+            lessonType: fields.lessonType.value,
+            date: fields.date.value,
+            status: fields.status.value
+        };
+        if (!data.teacherName || !data.subject || !data.classSection || !data.topic || !data.date) return;
+
+        if (editingId) {
+            const idx = plans.findIndex(p => p.id === editingId);
+            if (idx > -1) plans[idx] = { ...plans[idx], ...data };
+            editingId = null;
+            submitBtn.textContent = 'Add to Schedule';
+        } else {
+            plans.push({ id: Date.now().toString(), ...data });
+        }
+        form.reset();
+        save();
+    });
+
+    tbody.addEventListener('click', e => {
+        const tr = e.target.closest('tr');
+        if (!tr) return;
+        const id = tr.dataset.id;
+        if (e.target.matches('.delete-btn')) {
+            if (!confirm('Delete this plan?')) return;
+            plans = plans.filter(p => p.id !== id);
+            save();
+        } else if (e.target.matches('.edit-btn')) {
+            const p = plans.find(x => x.id === id);
+            if (!p) return;
+            fields.teacherName.value = p.teacherName;
+            fields.subject.value = p.subject;
+            fields.classSection.value = p.classSection;
+            fields.topic.value = p.topic;
+            fields.lessonType.value = p.lessonType;
+            fields.date.value = p.date;
+            fields.status.value = p.status;
+            editingId = id;
+            submitBtn.textContent = 'Save Changes';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else if (e.target.matches('.status-btn')) {
+            const p = plans.find(x => x.id === id);
+            if (!p) return;
+            p.status = p.status === 'Completed' ? 'Planned' : 'Completed';
+            save();
+        }
+    });
+
+    // Exposed to global because HTML uses onkeyup="filterPlans()"
+    window.filterPlans = function filterPlans() {
+        const q = (document.getElementById('filter-subject').value || '').trim().toLowerCase();
+        if (!q) {
+            render(plans);
+            return;
+        }
+        const filtered = plans.filter(p => p.subject.toLowerCase().includes(q));
+        render(filtered);
+    };
+
+    // initial render
+    render(plans);
+})();
